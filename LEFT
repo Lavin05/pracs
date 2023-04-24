@@ -1,0 +1,48 @@
+import re
+print("Enter the grammar")
+gm = {
+    'A->ABd|Aa|a',
+    'B->Be|b'
+}
+aplha = []
+beta = []
+for i in gm:
+    # print(re.split(r'->|\|', i))
+    exp = re.split(r'->|\|', i)
+    nt = exp[0]
+    cnt= 0
+    for i in exp:
+        if cnt == 0:
+            cnt += 1
+            continue
+        else:
+            if i[0] == exp[0]:
+                aplha.append(i[1:])
+                
+            else:
+                beta.append(i)
+    # print('alpha',aplha)
+    # print('beta',beta)
+    # use left recursion
+    print(exp[0],'->', end='')
+    for i in beta:
+        # print(i+exp[0]+'\'','|', end='')
+        # if last beta dont add | else add |
+        if i == beta[-1]:
+            print(i+exp[0]+'\'', end='')
+        else:
+            print(i+exp[0]+'\'','|', end='')
+    
+    print('\n',exp[0]+'\'','->', end='', sep='')
+    for i in aplha:
+        if i== aplha[-1]:
+            print(i+exp[0]+'\'','|', 'e', end='')
+        else:
+            print(i+exp[0]+'\'','|', end='')
+
+
+
+    alpha= []
+    beta = []
+
+    print('\n\n')
