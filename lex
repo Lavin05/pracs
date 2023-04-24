@@ -80,6 +80,88 @@ int main(){
      
     return 0;
 }
+4
+%{
+
+ void display( int x, char *y);
+%}
+
+%%
+
+(int|float|string|double|char|new) {  display(1,yytext); }
+[a-zA-Z][a-zA-Z0-9]* { display(2,yytext); }
+[,;{}()\[\]] { display(3,yytext); }
+[+*/=><-] { display(4,yytext); }
+.[-]*[0-9]+ { display(5,yytext); }
 
 
+%%
 
+void main() {
+    printf("Enter the code:");
+    yylex();
+
+}
+void display( int x, char *y) {
+    if (x==1) {
+        printf("Keyword: %s \n",y);
+    }
+    if (x==2) {
+        printf("Identifier: %s \n",y);
+    }
+    if (x==3) {
+        printf("Special Symbol: %s \n",y);
+    }
+    if (x==4) {
+        printf("Operator: %s \n",y);
+    }
+    if (x==5) {
+        printf("Number: %s \n",y);
+    }
+    if (x==6) {
+        printf("constants: %s \n",y);
+    }
+
+}
+
+int yywrap() {
+    return 1;
+}
+
+5.
+%{
+    char name[30];
+    
+    int choice = 1;
+%}
+
+%%
+\n { printf("Hello %s, Good something\n", name);  return 1;}
+%%
+
+void main(){
+    printf("Enter your name: ");
+    scanf("%s", name);
+    yylex();
+    printf("choice = %d", choice);
+    while(choice == 1){
+        printf("Enter 1 to enter the name again and 2 to exit: ");
+        scanf("%d", &choice);
+        printf("choice = %d", choice);
+
+        if(choice == 1){
+            printf("Enter your name: ");
+            scanf("%s", name);
+            yylex();
+        }
+        else if(choice == s2){
+            printf("Goodbye %s", name);
+            break;
+        }
+        else{
+            printf("Invalid choice");
+            choice = 1;
+        }
+    }
+}
+int yywrap(){return(1);}
