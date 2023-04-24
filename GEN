@@ -1,0 +1,133 @@
+import re
+print('enter the expression')
+exp = input()
+i=0
+outpt= []
+while(i<len(exp)):
+    if exp[i]=='+' or exp[i]=='-':
+        if exp[i+2]== '*' or exp[i+2]=='/':
+            print('t1 = ',exp[i+1], exp[i+2], exp[i+3])
+            st = 't1 = '+exp[i+1]+exp[i+2]+exp[i+3]
+            outpt.append(st)
+            print('t2 = ',exp[i-1], exp[i], 't1')
+            st = 't2 = '+exp[i-1]+exp[i]+'t1'
+            outpt.append(st)
+
+            break
+        else:
+            print('t1 = ',exp[i-1], exp[i], exp[i+1])
+            st = 't1 = '+exp[i-1]+exp[i]+exp[i+1]
+            outpt.append(st)
+            print('t2 = t1', exp[i+2], exp[i+3])
+            st = 't2 = t1'+exp[i+2]+exp[i+3]
+            outpt.append(st)
+            break
+    elif exp[i]=='*' or exp[i]=='/':
+        if exp[i+2]== '+' or exp[i+2]=='-':
+            print('t1 = ',exp[i-1], exp[i], exp[i+1])
+            st = 't1 = '+exp[i-1]+exp[i]+exp[i+1]
+            outpt.append(st)
+            print('t2 = t1', exp[i+2], exp[i+3])
+            st = 't2 = t1'+exp[i+2]+exp[i+3]
+            outpt.append(st)
+            break
+    elif exp[i]=='*' or exp[i]=='/':
+        print('t1 = ',exp[i-1], exp[i], exp[i+1])
+        st = 't1 = '+exp[i-1]+exp[i]+exp[i+1]
+        outpt.append(st)
+        break
+    i+=1
+
+
+print("MACHINE CODE")
+cnt = []
+count = 0
+for i in outpt:
+    if '*' in i:
+        # split and only keep the last two elements
+        ele = i.split(' ')[2].split('*')
+        if re.match(r'^t[0-9]', ele[1]):
+            print("match")
+            for i in cnt:
+                if i[0] == ele[1]:
+                    ele[1] = i[1]
+        if re.match(r'^t[0-9]', ele[0]):
+            print("match")
+            for i in cnt:
+                if i[0] == ele[0]:
+                    ele[0] = i[1]
+        cnt.append([ele[0], count])
+        print('MOV ',ele[0] ,count)
+        count += 1
+        cnt.append([ele[1], count])
+        print('MOV ',ele[1] ,count)
+        count += 1
+        print('MUL ',count-2,count-1)
+        # add the left split eement and give it the value of count-2
+        cnt.append([i.split(' ')[0], count-2])
+        # print(cnt)
+    if '+' in i:
+        # split and only keep the last two elements
+        ele = i.split(' ')[2].split('+')
+        # print("plus",ele)
+        if re.match(r'^t[0-9]', ele[1]):
+            print("match")
+            for i in cnt:
+                if i[0] == ele[1]:
+                    ele[1] = i[1]
+        if re.match(r'^t[0-9]', ele[0]):
+            print("match here" , ele[0] , cnt)
+            for i in cnt:
+                if i[0] == ele[0]:
+                    ele[0] = i[1]
+        cnt.append([ele[0], count])
+        print('MOV ',ele[0] ,count)
+        count += 1
+        cnt.append([ele[1], count])
+        print('MOV ',ele[1] ,count)
+        count += 1
+        print('ADD ',count-2,count-1)
+    if '-' in i:
+        # split and only keep the last two elements
+        ele = i.split(' ')[2].split('-')
+        if re.match(r'^t[0-9]', ele[1]):
+            print("match")
+            for i in cnt:
+                if i[0] == ele[1]:
+                    ele[1] = i[1]
+        if re.match(r'^t[0-9]', ele[0]):
+            print("match")
+            for i in cnt:
+                if i[0] == ele[0]:
+                    ele[0] = i[1]
+        cnt.append([ele[0], count])
+        print('MOV ',ele[0] ,count)
+        count += 1
+        cnt.append([ele[1], count])
+        print('MOV ',ele[1] ,count)
+        count += 1
+        print('SUB ',count-2,count-1)
+    if '/' in i:
+        # split and only keep the last two elements
+        ele = i.split(' ')[2].split('/')
+        if re.match(r'^t[0-9]', ele[1]):
+            print("match")
+            for i in cnt:
+                if i[0] == ele[1]:
+                    ele[1] = i[1]
+        if re.match(r'^t[0-9]', ele[0]):
+            print("match here")
+            for i in cnt:
+                if i[0] == ele[0]:
+                    ele[0] = i[1]
+        cnt.append([ele[0], count])
+        print('MOV ',ele[0] ,count)
+        count += 1
+        cnt.append([ele[1], count])
+        print('MOV ',ele[1] ,count)
+        count += 1
+        print('DIV ',count-2,count-1)
+        cnt.append([i.split(' ')[0], count-2])
+
+
+print('MOV', count-1, outpt[-1].split(' ')[0])
