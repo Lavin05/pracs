@@ -1,0 +1,43 @@
+import java.util.*;
+import java.lang.String;
+    public class tac{
+        public static void main(String[] args) {
+            Scanner sc= new Scanner(System.in);
+            System.out.println("enter your choice 1 for assignment 2 for arithmetic 3 to exit");
+            int choice = sc.nextInt();
+            if( choice==1){
+                System.out.println("enter the variable");
+                String var=sc.nextLine();
+                String[] result = var.split("=");
+                System.out.println("t1 = "+result[1]  );
+                System.out.println(result[0]+ "=t1");
+            }
+            else if(choice ==2){
+                System.out.println("enetr the expression");
+                String ex=sc.nextLine();
+                int i=0;
+                while( i<ex.length()){
+                    if(ex.charAt(i)=='+'|| ex.charAt(i)=='-'){
+                        if(ex.charAt(i+2)=='*'|| ex.charAt(i+2)=='/'){
+                            System.out.println("t1= ");
+                            System.out.print(ex.charAt(i+1));
+                            System.out.print(ex.charAt(i+2));
+                            System.out.print(ex.charAt(i+3));
+
+                            System.out.println("t2 =");
+                            System.out.print(ex.charAt(i-1));
+                            System.out.print(ex.charAt(i));
+                            System.out.print("t1");
+                        }
+                    }
+                    else{
+                        System.out.println("t1 = ");
+                        System.out.println(ex.charAt(i-1));
+                            System.out.println(ex.charAt(i));
+                            System.out.println();
+
+                    }
+                }
+            }
+        }
+    }
