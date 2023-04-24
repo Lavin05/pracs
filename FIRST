@@ -1,0 +1,54 @@
+import java.util.Scanner;
+
+public class first {
+
+    static int count, n = 0;
+    static String[] prodn = new String[10];
+    static char[] first = new char[10];
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("How many productions ? :");
+        count = scanner.nextInt();
+        scanner.nextLine(); // consume the leftover newline character after reading count
+        for (int i = 0; i < count; i++) {
+            prodn[i] = scanner.nextLine();
+        }
+        char c, ch;
+        int choice;
+        do {
+            n = 0;
+            System.out.print("Element :");
+            c = scanner.next().charAt(0);
+            FIRST(c);
+            System.out.printf("\n FIRST(%c)= { ", c);
+            for (int i = 0; i < n; i++) {
+                System.out.printf("%c ", first[i]);
+            }
+            System.out.println("}");
+
+            System.out.print("press 1 to continue : ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // consume the leftover newline character after reading choice
+        } while (choice == 1);
+    }
+
+    static void FIRST(char c) {
+        int j;
+        if (!(Character.isUpperCase(c))) {
+            first[n++] = c;
+        }
+        for (j = 0; j < count; j++) {
+            // finding row where production is there
+            if (prodn[j].charAt(0) == c) {
+                if (prodn[j].charAt(2) == '$') {
+                    first[n++] = '$';
+                } else if (Character.isLowerCase(prodn[j].charAt(2))) {
+                    first[n++] = prodn[j].charAt(2);
+                } else {
+                    FIRST(prodn[j].charAt(2));
+                }
+            }
+        }
+    }
+}
