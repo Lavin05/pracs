@@ -1,0 +1,61 @@
+import java.util.Scanner;
+
+public class follow {
+    static int n, m = 0;
+    static int p, i = 0, j = 0;
+    static char a[][] = new char[10][10];
+    static char f[] = new char[10];
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        char c, ch;
+        System.out.print("Enter the no.of productions: ");
+        n = scanner.nextInt();
+        System.out.println("Enter the productions (epsilon=$): ");
+        for (i = 0; i < n; i++)
+            a[i] = scanner.next().toCharArray();
+        do {
+            m = 0;
+            System.out.print("Enter the element whose FOLLOW is to be found: ");
+            c = scanner.next().charAt(0);
+            follow(c);
+            System.out.print("FOLLOW(" + c + ") = { ");
+            for (i = 0; i < m; i++)
+                System.out.print(f[i] + " ");
+            System.out.println("}\nDo you want to continue(0/1)?");
+        } while (scanner.nextInt() == 1);
+    }
+
+    public static void follow(char c) {
+        if (a[0][0] == c)
+            f[m++] = '$';
+        for (i = 0; i < n; i++) {
+            for (j = 2; j < a[i].length; j++) {
+                if (a[i][j] == c) {
+                    if (a[i][j + 1] != '\0')
+                        first(a[i][j + 1]);
+
+                    if (a[i][j + 1] == '\0' && c != a[i][0])
+                        follow(a[i][0]);
+
+                }
+            }
+        }
+    }
+
+    public static void first(char c) {
+        int k;
+        if (!(Character.isUpperCase(c)))
+            f[m++] = c;
+        for (k = 0; k < n; k++) {
+            if (a[k][0] == c) {
+                if (a[k][2] == '$')
+                    follow(a[i][0]);
+                else if (Character.isLowerCase(a[k][2]))
+                    f[m++] = a[k][2];
+                else
+                    first(a[k][2]);
+            }
+        }
+    }
+}
