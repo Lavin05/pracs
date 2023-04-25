@@ -41,3 +41,5 @@ import java.lang.String;
             }
         }
     }
+    INPUT-
+    C=A+B
