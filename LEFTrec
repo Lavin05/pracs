@@ -46,3 +46,10 @@ for i in gm:
     beta = []
 
     print('\n\n')
+
+
+input-
+E->E-A
+A->AT|a
+T=A;
+E->I
