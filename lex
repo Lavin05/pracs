@@ -18,6 +18,11 @@ int main()
     return 0;
 }
 
+lex vowel.l
+xx lex.yy.c -lfl
+./a.out
+
+input-abdABC
 
 2.is digit or not
 
@@ -38,17 +43,7 @@ int main()
         return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
+input a,8,8ab
 
 
 3.LEX Program to count the number of lines, words and characters in a text.
@@ -80,6 +75,12 @@ int main(){
      
     return 0;
 }
+
+input -
+Geeks for       Geeks 
+gfg  gfg
+
+
 4
 %{
 
@@ -165,3 +166,6 @@ void main(){
     }
 }
 int yywrap(){return(1);}
+
+
+input- any random names
