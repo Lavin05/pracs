@@ -52,3 +52,16 @@ public class first {
         }
     }
 }
+
+
+/* 
+input-
+E = TD
+D=+TD
+D=$
+T=FS
+S=*FS
+S=$
+F=(E)
+F=a
+*/
