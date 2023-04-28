@@ -1,0 +1,686 @@
+BFS
+
+package Viva.AI;
+
+import java.util.Scanner;
+import java.util.*;
+public class BFS {
+    public static void main(String[] args)
+    {
+        Scanner scn = new Scanner(System.in);
+        System.out.println("Enter the number of edges");
+        int n = scn.nextInt();
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+
+        int[][] edge = new int[n][3];
+        for(int i = 0;i<n;i++)
+        {
+//            System.out.println("Enter source");
+            int src = scn.nextInt();
+//            System.out.println("Enter destination");
+            int dest = scn.nextInt();
+//            System.out.println("Enter weight");
+
+            edge[i][0] = src;
+            edge[i][1] = dest;
+
+        }
+         System.out.println("enter no of nodes");
+        int node = scn.nextInt();
+        for(int i = 0;i<node;i++)
+        {
+            adj.add(new ArrayList<Integer>());
+        }
+
+        for(int i = 0;i<edge.length;i++)
+        {
+            adj.get(edge[i][0]).add(edge[i][1]);
+            adj.get(edge[i][1]).add(edge[i][0]);
+        }
+
+        Queue<Integer> q = new LinkedList<>();
+        q.add(0);
+        ArrayList<Integer> visited = new ArrayList<>();
+        int tar = 4;
+        visited.add(0);
+        while(q.size()>0)
+        {
+            int rem = q.remove();
+            System.out.print(" "+rem);
+            if(rem==tar)
+            {
+//
+                break;
+            }
+            ArrayList<Integer> curr = adj.get(rem);
+            for(int i = 0;i<curr.size();i++)
+            {
+                if(!visited.contains(curr.get(i)))
+                {
+                    q.add(curr.get(i));
+                    visited.add(curr.get(i));
+                }
+
+
+
+            }
+        }
+
+    }
+}
+
+
+2. A Star
+
+package Viva.AI;
+
+import java.util.*;
+class Tuple1{
+    int v,cst;
+
+
+    Tuple1(int v,int cst)
+    {
+        this.v = v;
+        this.cst = cst;
+
+    }
+}
+class Pair{
+     String p;
+     int c;
+
+     HashSet<Integer> v;
+    Pair(String path,int cst,HashSet<Integer> visited)
+    {
+        this.p = path;
+        this.c = cst;
+        this.v = visited;
+    }
+}
+public class AStar {
+    public static void main(String[] args)
+    {
+        Scanner scn = new Scanner(System.in);
+        System.out.println("Enter the number of edges");
+        int n = scn.nextInt();
+
+        int[][] edge = new int[n][3];
+        for(int i = 0;i<n;i++)
+        {
+//            System.out.println("Enter source");
+            int src = scn.nextInt();
+//            System.out.println("Enter destination");
+            int dest = scn.nextInt();
+//            System.out.println("Enter weight");
+            int wt = scn.nextInt();
+            edge[i][0] = src;
+            edge[i][1] = dest;
+            edge[i][2] = wt;
+        }
+
+
+
+
+        System.out.println("enter no of nodes");
+        int nodes = scn.nextInt();
+        int[] h = new int[nodes];
+        for(int i = 0;i<nodes;i++)
+        {
+            System.out.println("Enter heurestic value for node "+i);
+            h[i] = scn.nextInt();
+        }
+
+
+
+        System.out.println(findStar(edge,h,7));
+
+
+
+
+    }
+
+    private static String findStar(int[][] edge, int[] h,int dest) {
+        ArrayList<ArrayList<Tuple1>> adj = new ArrayList<>();
+        for(int i= 0;i<edge.length;i++)
+        {
+            adj.add(new ArrayList<>());
+        }
+        for(int i = 0;i<edge.length;i++)
+        {
+            adj.get(edge[i][0]).add(new Tuple1(edge[i][1],edge[i][2]));
+            adj.get(edge[i][1]).add(new Tuple1(edge[i][0],edge[i][2]));
+
+        }
+        PriorityQueue<Pair> pq = new PriorityQueue<>(new Comparator<Pair>() {
+            @Override
+            public int compare(Pair o1, Pair o2) {
+                return o1.c-o2.c;
+            }
+        });
+        HashSet<Integer> set = new HashSet<>();
+        set.add(0);
+        pq.add(new Pair("0",0,set));
+
+
+        while(pq.size()>0)
+        {
+            Pair curr = pq.remove();
+            int src = Integer.parseInt(curr.p.charAt(curr.p.length()-1)+"");
+            System.out.println(src);
+            HashSet<Integer> visited = curr.v;
+            if(src==dest)return curr.p;
+            ArrayList<Tuple1> list = adj.get(src);
+//             System.out.println(curr.p);
+
+            for(int i = 0;i<list.size();i++)
+            {
+                HashSet<Integer> curr_v = visited;
+                if(!curr_v.contains(list.get(i).v))
+                {
+                    String ans = curr.p+String.valueOf(list.get(i).v);
+                    curr_v.add(list.get(i).v);
+                    pq.add(new Pair(ans,curr.c+h[i]+list.get(i).cst,curr_v));
+                }
+
+            }
+
+
+        }
+        return "No";
+    }
+
+}
+
+
+3. UCS
+
+package Viva.AI;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.*;
+class Tuple{
+    int v,cst;
+
+
+    Tuple(int v,int cst)
+    {
+        this.v = v;
+        this.cst = cst;
+
+    }
+}
+public class UCS {
+    public static int cost;
+    public static void main(String[] args)
+    {
+        Scanner scn = new Scanner(System.in);
+        System.out.println("Enter the number of edges");
+        int n = scn.nextInt();
+        cost = 0;
+        int[][] edge = new int[n][3];
+        for(int i = 0;i<n;i++)
+        {
+//            System.out.println("Enter source");
+            int src = scn.nextInt();
+//            System.out.println("Enter destination");
+            int dest = scn.nextInt();
+//            System.out.println("Enter weight");
+            int wt = scn.nextInt();
+            edge[i][0] = src;
+            edge[i][1] = dest;
+            edge[i][2] = wt;
+        }
+
+
+        System.out.println(findUcs(edge,6));
+        System.out.println("Cost is "+cost);
+
+
+
+    }
+
+    private static String findUcs(int[][] edge, int target) {
+        ArrayList<ArrayList<Tuple>> adj = new ArrayList<>();
+        for(int i= 0;i<edge.length;i++)
+        {
+            adj.add(new ArrayList<>());
+        }
+        for(int i = 0;i<edge.length;i++)
+        {
+            adj.get(edge[i][0]).add(new Tuple(edge[i][1],edge[i][2]));
+//            adj.get(edge[i][1]).add(new Tuple(edge[i][0],edge[i][2]));
+
+        }
+        HashSet<Integer> visited = new HashSet<>();
+
+        return findPath(0,adj,visited,6);
+    }
+
+    private static String findPath(int idx, ArrayList<ArrayList<Tuple>> adj, HashSet<Integer> visited,int target) {
+        int min = (int)1e9;
+        Tuple pair = null;
+        System.out.println(idx);
+        if(idx==target)return String.valueOf(idx);
+        visited.add(idx);
+        ArrayList<Tuple> list = adj.get(idx);
+        for(int i=  0;i<list.size();i++)
+        {
+            if(list.get(i).cst<min && !visited.contains(list.get(i).v))
+            {
+                min = list.get(i).cst;
+                pair = list.get(i);
+            }
+        }
+        cost+=min;
+        if(list.size()==1)
+        {
+           return String.valueOf(idx)+ findPath(pair.v,adj,visited,target);
+        }
+       return String.valueOf(idx)+findPath(pair.v,adj,visited,target);
+    }
+}
+
+4) DFS
+
+import java.util.*;
+
+class Graph {
+  private LinkedList<Integer> adjLists[];
+  private boolean visited[];
+
+  Graph(int vertices) {
+    vertices++;
+    adjLists = new LinkedList[vertices];
+    visited = new boolean[vertices];
+
+    for (int i = 0; i < vertices; i++)
+      adjLists[i] = new LinkedList<Integer>();
+  }
+
+  void addEdge(int src, int dest) {
+    adjLists[src].add(dest);
+  }
+  void DFS(int vertex) {
+    visited[vertex] = true;
+    System.out.print(vertex + " ");
+
+    for(int adj : adjLists[vertex]){
+      if (!visited[adj])
+        DFS(adj);
+    }
+}
+
+  public static void main(String args[]) {
+    Scanner sc = new Scanner(System.in);
+    System.out.println("Enter Number of nodes ");
+    int n = sc.nextInt();
+    Graph g = new Graph(n);
+    System.out.println("Enter Number of edges ");
+    int ed = sc.nextInt();
+    System.out.println("Enter Edges");
+    for (int i = 0; i < ed; i++) {
+      g.addEdge(sc.nextInt(), sc.nextInt());
+    }
+    System.out.println("Enter start Node");
+    int st= sc.nextInt();
+    System.out.println("Following is Depth First Traversal");
+
+    g.DFS(st);
+  }
+}
+
+5) DFID
+
+
+import java.util.*;
+class Graph {
+int V; 
+LinkedList<Integer> adj[];
+
+// A function used by IDDFS
+boolean DLS(int v, int target, int limit)
+{
+	if (v == target) return true;
+
+	if (limit <= 0) return false;
+	for (int i : adj[v])
+	if (DLS(i, target, limit - 1))
+		return true;
+
+	return false;
+}
+
+public Graph(int v)
+{
+	V = v;
+	adj = new LinkedList[v];
+	for (int i = 0; i < v; ++i)
+	adj[i] = new LinkedList();
+}
+
+void addEdge(int v, int w)
+{
+	adj[v].add(w); // Add w to v's list.
+}
+boolean IDDFS(int src, int target, int max_depth)
+{
+	for (int i = 0; i <= max_depth; i++)
+	if (DLS(src, target, i))
+		return true;
+
+	return false;
+}
+}
+class Main {
+public static void main(String[] args)
+{
+	Scanner sc = new Scanner(System.in);
+	System.out.println("Enter Number of nodes ");
+	int n = sc.nextInt();
+	Graph g = new Graph(n);
+	System.out.println("Enter Number of edges ");
+	int ed = sc.nextInt();
+	System.out.println("Enter Edges");
+	for (int i = 0; i < ed; i++) {
+		g.addEdge(sc.nextInt(), sc.nextInt());
+	}
+
+	System.out.println("Enter Target Node");
+	int target = sc.nextInt();
+	System.out.println("Enter depth");
+	int maxDepth = sc.nextInt();
+	System.out.println("Enter Start Node");
+	int src = sc.nextInt();
+	if (g.IDDFS(src, target, maxDepth))
+	System.out.println(
+	"Target is reachable from source within max depth");
+	else
+	System.out.println(
+	"Target is NOT reachable from source within max depth");
+}
+}
+
+6) SimulatedAnnealing.java
+
+public class SimulatedAnnealing {
+  
+    
+    public static double objectiveFunction(double x) {
+      return Math.sin(x) - Math.cos(2*x);
+    }
+    
+    
+    public static double simulatedAnnealing(double x, double t, double alpha, double minT) {
+      double fx = objectiveFunction(x);
+      while (t > minT) {
+        double dx = (Math.random() * 2 - 1) * t; 
+        double xNext = x + dx;
+        double fxNext = objectiveFunction(xNext);
+        double delta = fxNext - fx;
+        if (delta > 0) {
+          x = xNext;
+          fx = fxNext;
+        } else {
+          double p = Math.exp(delta / t); 
+          if (Math.random() < p) {
+            x = xNext;
+            fx = fxNext;
+          }
+        }
+        t *= alpha; 
+      }
+      return x;
+    }
+    
+    public static void main(String[] args) {
+      double x = 0; 
+      double t = 1;
+      double alpha = 0.95;
+      double minT = 0.001;
+      double result = simulatedAnnealing(x, t, alpha, minT);
+      System.out.println("Maximum point found: x = " + result + ", f(x) = " + objectiveFunction(result));
+    }
+  }
+
+
+
+Genetics:
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class GeneticAlgorithm {
+  
+  private static Random random = new Random();
+  
+  public static int fitness(int[] individual) {
+    int sum = 0;
+    for (int i = 0; i < individual.length; i++) {
+      sum += individual[i];
+    }
+    return sum;
+  }
+  
+  public static int[] geneticAlgorithm(int populationSize, int chromosomeSize, int generations, double mutationRate) {
+    List<int[]> population = new ArrayList<>();
+    for (int i = 0; i < populationSize; i++) {
+      int[] individual = new int[chromosomeSize];
+      for (int j = 0; j < chromosomeSize; j++) {
+        individual[j] = random.nextInt(2);
+      }
+      population.add(individual);
+    }
+    
+    for (int generation = 0; generation < generations; generation++) {
+      List<Integer> fitnessScores = new ArrayList<>();
+      for (int[] individual : population) {
+        fitnessScores.add(fitness(individual));
+      }
+      List<int[][]> parents = new ArrayList<>();
+      for (int i = 0; i < populationSize / 2; i++) {
+        int[] parent1 = population.get(fitnessScores.indexOf(max(fitnessScores)));
+        fitnessScores.set(fitnessScores.indexOf(max(fitnessScores)), -1);
+
+        int[] parent2 = population.get(fitnessScores.indexOf(max(fitnessScores)));
+        fitnessScores.set(fitnessScores.indexOf(max(fitnessScores)), -1);
+
+        parents.add(new int[][] { parent1, parent2 });
+      }
+      
+      population.clear();
+      for (int[][] parentPair : parents) {
+        int[] parent1 = parentPair[0];
+        int[] parent2 = parentPair[1];
+        int[] child1 = parent1.clone();
+        int[] child2 = parent2.clone();
+        for (int i = 0; i < chromosomeSize; i++) {
+          if (random.nextDouble() < mutationRate) {
+            child1[i] = 1 - child1[i];
+          }
+          if (random.nextDouble() < mutationRate) {
+            child2[i] = 1 - child2[i];
+          }
+        }
+        population.add(child1);
+        population.add(child2);
+      }
+    }
+    
+    int maxFitness = -1;
+    int[] fittestIndividual = null;
+    for (int[] individual : population) {
+      int fitness = fitness(individual);
+      if (fitness > maxFitness) {
+        maxFitness = fitness;
+        fittestIndividual = individual;
+      }
+    }
+    return fittestIndividual;
+  }
+  
+  public static void main(String[] args) {
+    int[] fittestIndividual = geneticAlgorithm(100, 10, 50, 0.01);
+    System.out.print("Fittest individual: [ ");
+    for (int i = 0; i < fittestIndividual.length; i++) {
+      System.out.print(fittestIndividual[i] + " ");
+    }
+    System.out.println("]");
+  }
+  
+  private static int max(List<Integer> list) {
+    int max = Integer.MIN_VALUE;
+    for (int i : list) {
+      if (i > max) {
+        max = i;
+      }
+    }
+    return max;
+  }
+
+}
+
+
+ASTAR 2
+
+import java.util.*;
+
+public class AstarSeach {
+    public static void main(String[] args) {
+        int m, n;
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Enter the no of rows and columns in the maze ");
+        m = sc.nextInt();// rows
+        n = sc.nextInt();// columns
+
+        // intialized the maze
+        int[][] maze = new int[m][n];
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                System.out.println(
+                        "Enter 1 for a blocked cell and 0 for non-blocked cell at row " + i + " and column " + j);
+                int b = sc.nextInt();
+                maze[i][j] = b;
+            }
+        }
+
+        Node start = new Node(0, 0, 0);
+        Node goal = new Node(m - 1, n - 1);
+
+        start.h = heuristic(start, goal);
+        start.f = start.g + start.h;
+        goal.h = 0;
+
+        List<int[]> path = aSearch(maze, start, goal);
+
+        for (int[] p : path)
+            System.out.print(Arrays.toString(p) + " -> ");
+
+        System.out.println("END");
+
+        sc.close();
+    }
+
+    private static List<int[]> aSearch(int[][] maze, Node start, Node goal) {
+
+        PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> Integer.compare(a.f, b.f));
+        pq.offer(start);
+        Map<Node, Node> cameFrom = new HashMap<>();
+        int[][] visited = new int[maze.length][maze[0].length];
+        visited[0][0] = 1;
+
+        while (pq.size() > 0) {
+            Node curr = pq.poll();
+
+            if (curr.equals(goal)) {
+                return reconstructPath(cameFrom, curr);
+            }
+            List<Node> neighbors = getAllNeighbors(maze, curr);
+
+            for (Node adj : neighbors) {
+                if (visited[adj.x][adj.y] == 0) {
+                    adj.g = curr.g + 1;
+                    adj.h = heuristic(adj, goal);
+                    adj.f = adj.g + adj.h;
+                    visited[adj.x][adj.y] = 1;
+                    cameFrom.put(adj, curr);
+                    pq.offer(adj);
+                }
+            }
+
+        }
+        return null;
+    }
+
+    private static List<int[]> reconstructPath(Map<Node, Node> cameFrom, Node curr) {
+        List<int[]> path = new ArrayList<>();
+
+        while (cameFrom.containsKey(curr)) {
+            path.add(0, new int[] { curr.x, curr.y });
+            curr = cameFrom.get(curr);
+        }
+        path.add(0, new int[] { curr.x, curr.y });
+
+        return path;
+    }
+
+    private static List<Node> getAllNeighbors(int[][] maze, Node curr) {
+        List<Node> neighbors = new ArrayList<>();
+
+        int[][] D = { { -1, 0 }, { 0, -1 }, { 0, 1 }, { 1, 0 } };
+
+        for (int[] d : D) {
+            int r = curr.x + d[0];
+            int c = curr.y + d[1];
+
+            if (r >= 0 && r < maze.length && c >= 0 && c < maze[0].length && maze[r][c] == 0) {
+                neighbors.add(new Node(r, c, Integer.MAX_VALUE));
+            }
+        }
+
+        return neighbors;
+    }
+
+    public static int heuristic(Node a, Node b) {
+        return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+    }
+
+}
+
+class Node {
+    int x;
+    int y;
+    int f;
+    int g;
+    int h;
+
+    Node(int x, int y, int g) {
+        this.x = x;
+        this.y = y;
+        this.g = g;
+
+    }
+
+    Node(int x, int y) {
+        this.x = x;
+        this.y = y;
+
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        // TODO Auto-generated method stub
+        return ((Node) obj).x == x && ((Node) obj).y == y;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
+    }
+}
